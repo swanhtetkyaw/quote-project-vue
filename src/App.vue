@@ -1,28 +1,53 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <app-progress :quoteCount="quotes.length" :maxQuotes="maxQuotes"></app-progress>
+    <app-new-quote @addNewQuote="addQuote"></app-new-quote>
+    <app-quote-grid :quotes="quotes" @clickedQuote="deleteQuote"></app-quote-grid>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <div class="alert alert-info">Click the box to delete</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import QuoteGrid from "./components/QuotGrid.vue";
+import NewQuote from "./components/newQuote.vue";
+import Progress from "./components/progressHeader.vue";
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      quotes: [
+        {
+          quoteContent: "Be yourself; everyone else is already taken.",
+          author: "Oscar Wilde"
+        }
+      ],
+      maxQuotes: 10
+    };
+  },
   components: {
-    HelloWorld
+    appQuoteGrid: QuoteGrid,
+    appNewQuote: NewQuote,
+    appProgress: Progress
+  },
+  methods: {
+    addQuote(quote) {
+      if (quote.quoteContent) {
+        if (this.quotes.length >= 10) {
+          return alert("Delete one or more quotes to add more!");
+        }
+        this.quotes.push(quote);
+      }
+    },
+    deleteQuote(index) {
+      this.quotes.splice(index, 1);
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
